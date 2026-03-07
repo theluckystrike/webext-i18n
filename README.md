@@ -47,3 +47,8 @@ const stats = CoverageStats.getStats('./my-ext');
 
 ## 📄 License
 MIT — [Zovo](https://zovo.one)
+
+
+---
+
+Built with ❤️ by [zovo.one](https://zovo.one)

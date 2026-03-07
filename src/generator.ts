@@ -1,6 +1,6 @@
 /**
  * i18n Messages Generator
- * Generate _locales/*/messages.json from source translations
+ * Generate _locales/[locale]/messages.json from source translations
     */
 
 import * as fs from 'fs';
