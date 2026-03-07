@@ -1,6 +1,6 @@
 # webext-i18n — Chrome Extension Internationalization Toolkit
 
-[![npm](https://img.shields.io/npm/v/webext-i18n)](https://www.npmjs.com/package/webext-i18n)
+[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-i18n)](https://www.npmjs.com/package/@theluckystrike/webext-i18n)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
@@ -11,8 +11,8 @@
 ## 📦 Install
 
 ```bash
-npm install webext-i18n        # library
-npm install -g webext-i18n     # CLI
+npm install @theluckystrike/webext-i18n        # library
+npm install -g @theluckystrike/webext-i18n     # CLI
 ```
 
 ## 🚀 CLI Usage
@@ -27,7 +27,7 @@ webext-i18n unused ./my-extension      # Find unused translation keys
 ## 📚 Library API
 
 ```typescript
-import { I18nGenerator, I18nValidator, I18nRuntime, CoverageStats } from 'webext-i18n';
+import { I18nGenerator, I18nValidator, I18nRuntime, CoverageStats } from '@theluckystrike/webext-i18n';
 
 // Generate _locales from translations
 I18nGenerator.generate({ en: { greeting: 'Hello' }, es: { greeting: 'Hola' } }, './my-ext');
