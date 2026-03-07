@@ -1,7 +1,8 @@
 # webext-i18n — Chrome Extension Internationalization Toolkit
 
-[![npm](https://img.shields.io/npm/v/webext-i18n.svg)](https://www.npmjs.com/package/webext-i18n)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/webext-i18n)](https://www.npmjs.com/package/webext-i18n)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
 > **Built by [Zovo](https://zovo.one)** — used to localize 18+ extensions into 55 languages
 
@@ -51,4 +52,4 @@ MIT — [Zovo](https://zovo.one)
 
 ---
 
-Built with ❤️ by [zovo.one](https://zovo.one)
+Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
