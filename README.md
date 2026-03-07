@@ -50,6 +50,11 @@ const stats = CoverageStats.getStats('./my-ext');
 MIT — [Zovo](https://zovo.one)
 
 
+
+## License
+
+MIT
+
 ---
 
 Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
