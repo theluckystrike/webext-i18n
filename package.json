@@ -1,9 +1,12 @@
 {
   "name": "webext-i18n",
   "version": "0.1.0",
-  "description": "Internationalization toolkit for Chrome extensions — generate _locales/messages.json, validate translations, extract strings, and get coverage stats. CLI + library.",
+  "description": "Internationalization toolkit for Chrome extensions — generate, validate, sort, and diff locale files. CLI + programmatic API. Part of @zovo/webext.",
   "author": "Zovo <hello@zovo.one>",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "chrome-extension",
     "i18n",
