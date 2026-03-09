@@ -1,178 +1,174 @@
 # Contributing to webext-i18n
 
-Thank you for your interest in contributing to webext-i18n! This guide will help you get started.
+Thank you for your interest in contributing! This guide will help you get started.
 
-## Development Setup
-
-### Prerequisites
-
-- **Node.js** 18+ 
-- **pnpm** 8+ (recommended) or npm
-
-### Quick Start
+## 🚀 Quick Start
 
 ```bash
 # Fork the repository
-git fork https://github.com/theluckystrike/webext-i18n.git
-
 # Clone your fork
 git clone https://github.com/YOUR_USERNAME/webext-i18n.git
 cd webext-i18n
 
 # Install dependencies
-pnpm install
+npm install
 
-# Build the project
-pnpm build
+# Create a feature branch
+git checkout -b feature/your-feature
 
-# Run tests
-pnpm test
+# Make your changes and test
+npm test
+
+# Push and create PR
+git push origin feature/your-feature
 ```
 
-## Project Structure
+## 🛠️ Development Setup
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Build the Project
+
+```bash
+npm run build
+```
+
+### Run Tests
+
+```bash
+npm test
+```
+
+### Watch Mode
+
+```bash
+npm run dev
+```
+
+## 📁 Project Structure
 
 ```
 webext-i18n/
 ├── src/
-│   ├── cli.ts          # Command-line interface
-│   ├── generator.ts    # Locale file generation
-│   ├── validator.ts    # Locale validation
-│   ├── extractor.ts     # Key extraction from source
+│   ├── cli.ts           # Command-line interface
+│   ├── generator.ts     # Generate messages.json files
+│   ├── validator.ts    # Validate locale structure
+│   ├── extractor.ts    # Extract keys from source
 │   ├── stats.ts        # Coverage statistics
-│   ├── runtime.ts      # Runtime translation helpers
-│   └── index.ts        # Public API exports
+│   ├── runtime.ts      # Runtime utilities
+│   └── index.ts        # Main exports
 ├── .github/
 │   └── workflows/      # CI configuration
 ├── package.json
 └── tsconfig.json
 ```
 
-## Adding New CLI Commands
+## ➕ Adding New CLI Commands
 
-New CLI commands should be added to `src/cli.ts`:
+1. **Create the command logic** in a new file under `src/`:
 
 ```typescript
-program.command('my-command')
-  .description('Description of what it does')
-  .argument('[dir]', 'Argument description', 'default-value')
+// src/newcommand.ts
+export class NewCommand {
+  static execute(dir: string): void {
+    // Your command logic here
+    console.log('Executing new command in:', dir);
+  }
+}
+```
+
+2. **Add the command to CLI** in `src/cli.ts`:
+
+```typescript
+import { NewCommand } from './newcommand';
+
+program.command('newcommand')
+  .description('Description of what this command does')
+  .argument('[dir]', 'Target directory', '.')
   .action((dir: string) => {
-    // Your implementation
-    console.log('Command executed');
+    NewCommand.execute(dir);
   });
 ```
 
-### Example: Adding a `sort` command
+3. **Export from index** in `src/index.ts`:
 
 ```typescript
-// In src/cli.ts, add:
-import * as fs from 'fs';
-import * as path from 'path';
-
-program.command('sort')
-  .description('Sort translation keys alphabetically')
-  .argument('[dir]', 'Extension directory', '.')
-  .action((dir: string) => {
-    const localesDir = path.join(dir, '_locales');
-    if (!fs.existsSync(localesDir)) {
-      console.log(chalk.red('_locales directory not found'));
-      return;
-    }
-    
-    const locales = fs.readdirSync(localesDir)
-      .filter(d => fs.statSync(path.join(localesDir, d)).isDirectory());
-    
-    for (const locale of locales) {
-      const messagesPath = path.join(localesDir, locale, 'messages.json');
-      if (fs.existsSync(messagesPath)) {
-        const messages = JSON.parse(fs.readFileSync(messagesPath, 'utf-8'));
-        const sorted: Record<string, any> = {};
-        Object.keys(messages).sort().forEach(key => {
-          sorted[key] = messages[key];
-        });
-        fs.writeFileSync(messagesPath, JSON.stringify(sorted, null, 2));
-      }
-    }
-    console.log(chalk.green(`Sorted keys in ${locales.length} locale(s)`));
-  });
+export { NewCommand } from './newcommand';
 ```
 
-## Adding New Locales
-
-To add support for a new locale:
-
-1. **Test the locale** with your extension:
-   ```bash
-   mkdir -p _locales/NEW_LOCALE
-   echo '{}' > _locales/NEW_LOCALE/messages.json
-   ```
-
-2. **Update README.md** with the new locale in the Supported Locales table
-
-3. **Add tests** in `src/__tests__/`
-
-## Running Tests
+4. **Test your command**:
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run tests in watch mode
-pnpm test --watch
-
-# Run specific test file
-pnpm test --testPathPattern=validator
+npm run build
+node dist/cli.js newcommand ./test-dir
 ```
 
-## Code Style
+## 🌍 Adding New Locale Support
 
-- Use **TypeScript** for all new code
-- Follow existing code conventions
+The tool supports all Chrome Web Store locales by default. To add support for a new locale:
+
+1. **Update the CLI** if needed (typically not required since locales are read dynamically)
+2. **Add tests** for the new locale in `src/__tests__/`
+3. **Update documentation** in README.md
+
+## 🧪 Testing
+
+Write tests for new features:
+
+```typescript
+// src/__tests__/generator.test.ts
+import { I18nGenerator } from '../generator';
+
+describe('I18nGenerator', () => {
+  it('should generate messages.json', () => {
+    const translations = {
+      en: { hello: 'Hello' }
+    };
+    const result = I18nGenerator.generate(translations, './test-output');
+    expect(result.totalKeys).toBe(1);
+  });
+});
+```
+
+Run tests:
+
+```bash
+npm test
+```
+
+## 📝 Code Style
+
+- Use TypeScript
+- Follow existing code patterns
 - Add JSDoc comments for public APIs
-- Run `pnpm lint` before committing
-
-## Submitting Changes
-
-1. Create a feature branch:
-   ```bash
-   git checkout -b feature/my-new-feature
-   ```
-
-2. Make your changes and commit:
-   ```bash
-   git add .
-   git commit -m 'feat: add new command X'
-   ```
-
-3. Push to your fork:
-   ```bash
-   git push origin feature/my-new-feature
-   ```
-
-4. Open a Pull Request
-
-## Commit Messages
-
-We follow [Conventional Commits](https://conventionalcommits.org):
-
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `refactor:` Code refactoring
-- `test:` Adding tests
-- `chore:` Maintenance
-
-## Publishing
-
-Maintainers can publish to npm:
+- Run lint before committing:
 
 ```bash
-# Bump version
-pnpm version patch  # or minor, major
-
-# Publish to npm
-pnpm publish
+npm run lint
 ```
 
----
+## 📤 Submitting Changes
 
-Questions? Open an issue at https://github.com/theluckystrike/webext-i18n/issues
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## ❓ Getting Help
+
+- Open an issue for bugs or feature requests
+- Check existing issues before creating new ones
+
+## 📜 License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
