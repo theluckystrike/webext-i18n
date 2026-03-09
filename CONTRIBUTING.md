@@ -1,157 +1,87 @@
 # Contributing to webext-i18n
 
-Thank you for your interest in contributing to webext-i18n! This document outlines the process for contributing to this project.
+Thank you for your interest in contributing to webext-i18n! This document provides guidelines and instructions for contributing to this project.
 
-## Code of Conduct
+## How to Fork and Clone
 
-By participating in this project, you are expected to uphold our [Code of Conduct](https://github.com/theluckystrike/.github/blob/main/CODE_OF_CONDUCT.md). Please report unacceptable behavior to hello@zovo.one.
+1. **Fork the repository**: Click the "Fork" button on the GitHub page to create your own copy of the repository.
 
-## How to Contribute
+2. **Clone your fork**:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/webext-i18n.git
+   cd webext-i18n
+   ```
 
-### Reporting Bugs
+3. **Add the upstream repository**:
+   ```bash
+   git remote add upstream https://github.com/theluckystrike/webext-i18n.git
+   ```
 
-1. **Search existing issues** — Someone may have already reported the issue.
-2. **Create a new issue** — Use the bug report template.
-3. **Include**:
-   - Clear title and description
-   - Steps to reproduce
-   - Expected vs. actual behavior
-   - Node.js version, OS, and extension type
-
-### Suggesting Features
-
-1. **Check the roadmap** — Features may already be planned.
-2. **Open a discussion** — Use GitHub Discussions for feature ideas.
-3. **Provide context**:
-   - What problem does this solve?
-   - What's your use case?
-   - Any implementation ideas?
-
-### Pull Requests
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/my-feature`
-3. **Make your changes** — Follow the coding standards
-4. **Add tests** — If adding new functionality
-5. **Run the test suite**: `npm test`
-6. **Commit with clear messages**: [Conventional commits](https://www.conventionalcommits.org/) are preferred
-7. **Push and open a PR**
+4. **Keep your fork synced**:
+   ```bash
+   git fetch upstream
+   git checkout main
+   git merge upstream/main
+   ```
 
 ## Development Setup
 
-```bash
-# Clone your fork
-git clone https://github.com/YOUR_USERNAME/webext-i18n.git
-cd webext-i18n
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-# Install dependencies
-npm install
+2. **Run tests**:
+   ```bash
+   npm test
+   ```
 
-# Build the project
-npm run build
+3. **Build the project**:
+   ```bash
+   npm run build
+   ```
 
-# Run tests
-npm test
+## Code Style Guidelines
 
-# Run in development mode (watch)
-npm run dev
-```
+- Use consistent indentation (2 or 4 spaces)
+- Write meaningful commit messages
+- Add comments for complex logic
+- Follow existing code patterns in the project
+- Ensure all tests pass before submitting
 
-## Coding Standards
+## How to Submit PRs
 
-- **TypeScript** — Use strict mode, proper typing
-- **ESLint** — Follow the configured linting rules
-- **Formatting** — Prettier is configured (run `npx prettier --write`)
-- **Commits** — Use clear, descriptive commit messages
+1. **Create a feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-### Commit Message Format
+2. **Make your changes**: Implement your feature or fix the bug.
 
-```
-type(scope): description
+3. **Commit your changes**:
+   ```bash
+   git add .
+   git commit -m "Description of your changes"
+   ```
 
-[optional body]
+4. **Push to your fork**:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 
-[optional footer]
-```
+5. **Open a Pull Request**: Go to the original repository and click "New Pull Request". Fill in the template and submit.
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+## Issue Reporting Guidelines
 
-Example:
-```
-feat(cli): add diff command for comparing locales
+When reporting issues, please include:
 
-Add new diff command to show differences between locale files
-- Shows missing keys in each locale
-- Highlights extra keys not in default locale
-
-Closes #123
-```
-
-## Project Structure
-
-```
-webext-i18n/
-├── src/
-│   ├── cli.ts          # CLI entry point
-│   ├── generator.ts    # Generate messages.json
-│   ├── validator.ts   # Validate locale structure
-│   ├── extractor.ts   # Extract keys from source
-│   ├── stats.ts       # Coverage statistics
-│   ├── runtime.ts     # Runtime helpers
-│   └── index.ts       # Public exports
-├── dist/               # Compiled output
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
-└── package.json
-```
-
-## Testing
-
-Run tests with vitest:
-
-```bash
-npm test
-```
-
-Add tests to `src/__tests__/`:
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import { I18nGenerator } from '../generator';
-
-describe('I18nGenerator', () => {
-  it('should generate locale files', () => {
-    const translations = { en: { hello: 'Hello' } };
-    const result = I18nGenerator.generate(translations, './test-output');
-    expect(result.locales).toContain('en');
-  });
-});
-```
-
-## Documentation
-
-- **README.md** — Main documentation (features, CLI, API)
-- **CHANGELOG.md** — Release notes (keep updated)
-- **JSDoc comments** — For public API methods
-
-## Release Process
-
-1. Update `CHANGELOG.md` with version and date
-2. Update version in `package.json`
-3. Create a git tag: `git tag v1.0.0`
-4. Push tag: `git push origin main --tags`
-5. GitHub Actions will publish to npm
-
-## Questions?
-
-- Open a [GitHub Discussion](https://github.com/theluckystrike/webext-i18n/discussions)
-- Email: hello@zovo.one
+- **Clear title**: Describe the problem concisely
+- **Steps to reproduce**: Numbered list of steps
+- **Expected behavior**: What you expected to happen
+- **Actual behavior**: What actually happened
+- **Environment details**: OS, browser, version, etc.
+- **Screenshots**: If applicable
 
 ---
 
-## Recognition
-
-Contributors will be acknowledged in the README and release notes.
-
-Thank you for making webext-i18n better! 🎉
+Built at [zovo.one](https://zovo.one) by [theluckystrike](https://github.com/theluckystrike)
