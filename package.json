@@ -2,6 +2,9 @@
   "name": "webext-i18n",
   "version": "0.1.0",
   "description": "Internationalization toolkit for Chrome extensions — generate, validate, sort, and diff locale files. CLI + programmatic API. Part of @zovo/webext.",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "author": "Zovo <hello@zovo.one>",
   "license": "MIT",
   "keywords": [
@@ -23,10 +26,6 @@
     "url": "https://github.com/theluckystrike/webext-i18n.git"
   },
   "homepage": "https://github.com/theluckystrike/webext-i18n",
-  "bugs": "https://github.com/theluckystrike/webext-i18n/issues",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "bin": {
     "webext-i18n": "./dist/cli.js"
   },
