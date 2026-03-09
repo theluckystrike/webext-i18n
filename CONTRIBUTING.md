@@ -1,174 +1,136 @@
 # Contributing to webext-i18n
 
-Thank you for your interest in contributing! This guide will help you get started.
+Thank you for your interest in contributing! This guide will help you get started with development.
 
 ## 🚀 Quick Start
 
 ```bash
-# Fork the repository
-# Clone your fork
+# 1. Fork the repository
+# Click the "Fork" button on GitHub
+
+# 2. Clone your fork
 git clone https://github.com/YOUR_USERNAME/webext-i18n.git
 cd webext-i18n
 
-# Install dependencies
+# 3. Install dependencies
 npm install
+# or
+pnpm install
 
-# Create a feature branch
-git checkout -b feature/your-feature
+# 4. Create a feature branch
+git checkout -b feature/my-awesome-feature
 
-# Make your changes and test
+# 5. Make your changes
+# ... write code ...
+
+# 6. Run tests
 npm test
 
-# Push and create PR
-git push origin feature/your-feature
+# 7. Build the project
+npm run build
+
+# 8. Push and create a PR
+git push origin feature/my-awesome-feature
 ```
 
-## 🛠️ Development Setup
+## 📋 Development Workflow
 
 ### Prerequisites
 
 - Node.js 18+
-- npm 9+
+- npm or pnpm
 
-### Install Dependencies
+### Available Scripts
 
-```bash
-npm install
-```
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Compile TypeScript to JavaScript |
+| `npm run dev` | Watch mode for development |
+| `npm test` | Run tests |
+| `npm run lint` | Lint source files |
 
-### Build the Project
+### Code Style
 
-```bash
-npm run build
-```
+- Use TypeScript for all new code
+- Follow existing code conventions
+- Run `npm run lint` before committing
+- Add tests for new functionality
 
-### Run Tests
+## 🎯 Adding New CLI Commands
 
-```bash
-npm test
-```
-
-### Watch Mode
-
-```bash
-npm run dev
-```
-
-## 📁 Project Structure
-
-```
-webext-i18n/
-├── src/
-│   ├── cli.ts           # Command-line interface
-│   ├── generator.ts     # Generate messages.json files
-│   ├── validator.ts    # Validate locale structure
-│   ├── extractor.ts    # Extract keys from source
-│   ├── stats.ts        # Coverage statistics
-│   ├── runtime.ts      # Runtime utilities
-│   └── index.ts        # Main exports
-├── .github/
-│   └── workflows/      # CI configuration
-├── package.json
-└── tsconfig.json
-```
-
-## ➕ Adding New CLI Commands
-
-1. **Create the command logic** in a new file under `src/`:
+New CLI commands are added in `src/cli.ts`. Each command follows this pattern:
 
 ```typescript
-// src/newcommand.ts
-export class NewCommand {
-  static execute(dir: string): void {
-    // Your command logic here
-    console.log('Executing new command in:', dir);
+program.command('command-name')
+  .description('Description of what the command does')
+  .argument('[dir]', 'Argument description', 'default-value')
+  .action((dir: string) => {
+    // Your implementation
+    console.log('Command executed!');
+  });
+```
+
+### Example: Adding a `sort` Command
+
+```typescript
+// In src/cli.ts, add after other commands:
+
+program.command('sort')
+  .description('Sort translation keys alphabetically')
+  .argument('[dir]', 'Locale directory', './_locales/en')
+  .action((dir: string) => {
+    const result = I18nSorter.sort(dir);
+    console.log(chalk.green(`Sorted ${result.keys} keys in ${result.file}`));
+  });
+```
+
+## 🌍 Adding Locale Support
+
+To add support for a new locale:
+
+1. **Update the type definitions** in `src/types.ts` (create if needed)
+2. **Add the locale code** to the supported locales list in documentation
+3. **Add tests** for the new locale format
+
+### Locale Structure
+
+Chrome extensions expect this structure:
+
+```
+_locales/
+└── {locale_code}/
+    └── messages.json
+```
+
+Example (`_locales/en/messages.json`):
+```json
+{
+  "extension_name": {
+    "message": "My Extension",
+    "description": "The name of the extension"
+  },
+  "greeting": {
+    "message": "Hello, $1!",
+    "description": "Greeting message"
   }
 }
 ```
 
-2. **Add the command to CLI** in `src/cli.ts`:
+## 🐛 Reporting Issues
 
-```typescript
-import { NewCommand } from './newcommand';
+When reporting issues, please include:
 
-program.command('newcommand')
-  .description('Description of what this command does')
-  .argument('[dir]', 'Target directory', '.')
-  .action((dir: string) => {
-    NewCommand.execute(dir);
-  });
-```
+1. **Environment**: Node.js version, OS
+2. **Reproduction steps**: Clear steps to reproduce
+3. **Expected vs actual behavior**
+4. **Screenshots** if applicable
+5. **Minimal reproduction** if possible
 
-3. **Export from index** in `src/index.ts`:
+## 💬 Getting Help
 
-```typescript
-export { NewCommand } from './newcommand';
-```
-
-4. **Test your command**:
-
-```bash
-npm run build
-node dist/cli.js newcommand ./test-dir
-```
-
-## 🌍 Adding New Locale Support
-
-The tool supports all Chrome Web Store locales by default. To add support for a new locale:
-
-1. **Update the CLI** if needed (typically not required since locales are read dynamically)
-2. **Add tests** for the new locale in `src/__tests__/`
-3. **Update documentation** in README.md
-
-## 🧪 Testing
-
-Write tests for new features:
-
-```typescript
-// src/__tests__/generator.test.ts
-import { I18nGenerator } from '../generator';
-
-describe('I18nGenerator', () => {
-  it('should generate messages.json', () => {
-    const translations = {
-      en: { hello: 'Hello' }
-    };
-    const result = I18nGenerator.generate(translations, './test-output');
-    expect(result.totalKeys).toBe(1);
-  });
-});
-```
-
-Run tests:
-
-```bash
-npm test
-```
-
-## 📝 Code Style
-
-- Use TypeScript
-- Follow existing code patterns
-- Add JSDoc comments for public APIs
-- Run lint before committing:
-
-```bash
-npm run lint
-```
-
-## 📤 Submitting Changes
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## ❓ Getting Help
-
-- Open an issue for bugs or feature requests
+- Open an [issue](https://github.com/theluckystrike/webext-i18n/issues) for bugs or feature requests
 - Check existing issues before creating new ones
 
-## 📜 License
+## 📝 License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.

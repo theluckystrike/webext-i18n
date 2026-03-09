@@ -1,52 +1,57 @@
 # webext-i18n — Chrome Extension Internationalization Toolkit
 
-[![npm](https://img.shields.io/npm/v/webext-i18n?color=10b981&label=npm)](https://www.npmjs.com/package/webext-i18n)
+<div align="center">
+
+[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-i18n?color=10B981&label=npm)](https://npmjs.com/package/@theluckystrike/webext-i18n)
+[![npm downloads](https://img.shields.io/npm/dt/@theluckystrike/webext-i18n?color=10B981)](https://npmjs.com/package/@theluckystrike/webext-i18n)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![CI](https://github.com/theluckystrike/webext-i18n/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-i18n/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/webext-i18n)](https://www.npmjs.com/package/webext-i18n)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://typescriptlang.org)
+[![Build Status](https://github.com/theluckystrike/webext-i18n/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-i18n/actions)
+[![Package Size](https://img.shields.io/bundlephobia/min/@theluckystrike/webext-i18n?color=10B981)](https://bundlephobia.com/package/@theluckystrike/webext-i18n)
 
-> **Built by [Zovo](https://zovo.one)** — Internationalization toolkit used to localize 18+ Chrome extensions into **55 languages**
+**Built by [Zovo](https://zovo.one)** — powering 18+ Chrome extensions in 55 languages
 
-**webext-i18n** is a comprehensive internationalization toolkit for Chrome extensions. Generate, validate, sort, diff, and manage your `_locales/messages.json` files with a powerful CLI and programmatic API.
+</div>
+
+---
+
+**webext-i18n** is a comprehensive internationalization toolkit for Chrome extensions. Generate, validate, sort, and diff locale files with a full-featured CLI and programmatic API. Part of the [@zovo/webext](https://github.com/theluckystrike) ecosystem.
 
 ## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
-| 🏗️ **Generate** | Create `_locales/messages.json` from translation objects |
-| ✅ **Validate** | Validate locale structure and catch missing translations |
-| 📊 **Stats** | Translation coverage reports per locale |
-| 🔍 **Extract** | Extract i18n keys from source code |
-| 🧹 **Unused Keys** | Find translation keys that are no longer used |
-| 🔧 **CLI + API** | Powerful command-line interface + full TypeScript API |
-| 🌐 **55 Locales** | Support for all Chrome Web Store locales |
+| **🔍 Validate** | Validate `_locales/messages.json` structure and message format |
+| **📊 Stats** | Translation coverage analysis across all locales |
+| **🔑 Extract** | Extract i18n keys from source code (JS/TS/HTML) |
+| **🗑 Unused Keys** | Find translation keys that are no longer used |
+| **🧹 Sort** | Alphabetically sort translation keys for consistency |
+| **⚡ CLI** | Full-featured command-line interface |
+| **📦 Library** | Programmatic API for build pipelines |
 
-## 📦 Installation
+## 📦 Install
 
 ```bash
 # As a library (recommended)
-npm install webext-i18n
+npm install @theluckystrike/webext-i18n
 
 # Or globally for CLI
-npm install -g webext-i18n
+npm install -g @theluckystrike/webext-i18n
 ```
 
-## 🚀 CLI Usage
+Or with pnpm:
+```bash
+pnpm add @theluckystrike/webext-i18n
+```
 
-### `webext-i18n validate [dir]`
+## 🚀 CLI Commands
 
-Validate the `_locales` directory structure and check for missing translations.
+### `validate` — Validate Locale Structure
+
+Validates that your `_locales` directory has the correct structure and that all `messages.json` files are properly formatted.
 
 ```bash
-# Validate current directory
-webext-i18n validate
-
-# Validate specific extension directory
 webext-i18n validate ./my-extension
-
-# Validate with full path
-webext-i18n validate /path/to/extension
 ```
 
 **Output:**
@@ -56,190 +61,224 @@ webext-i18n validate /path/to/extension
 Locales: en, es, fr, de, ja, zh_CN
 ```
 
-### `webext-i18n stats [dir]`
+**With errors:**
+```
+❌ Validation failed
+  ✗ Missing 'message' field for key 'greeting' in messages.json (es)
+  ✗ Duplicate key 'settings_title' found (fr)
 
-Show translation coverage for all locales.
+Warnings:
+  ⚠ Unused placeholder {count} in key 'items_left'
+
+Locales: en, es, fr, de
+```
+
+### `stats` — Translation Coverage Report
+
+Shows translation completeness across all locales, highlighting missing keys and percentage coverage.
 
 ```bash
-# Get coverage stats for current directory
-webext-i18n stats
-
-# Get stats for specific extension
 webext-i18n stats ./my-extension
 ```
 
 **Output:**
 ```
-# Translation Coverage
-
-| Locale  | Coverage | Missing |
-|---------|----------|---------|
-| en      | 100%     | 0       |
-| es      | 95%      | 3       |
-| fr      | 88%      | 7       |
-| de      | 92%      | 5       |
+┌────────────┬────────┬────────┬──────────┐
+│ Locale     │ Keys   │ Cov.   │ Missing  │
+├────────────┼────────┼────────┼──────────┤
+│ en         │ 142    │ 100%   │ —        │
+│ es         │ 140    │ 98.6%  │ 2        │
+│ fr         │ 138    │ 97.2%  │ 4        │
+│ de         │ 135    │ 95.1%  │ 7        │
+│ ja         │ 142    │ 100%   │ —        │
+│ zh_CN      │ 142    │ 100%   │ —        │
+└────────────┴────────┴────────┴──────────┘
+Total: 142 keys across 6 locales
 ```
 
-### `webext-i18n extract [dir]`
+### `extract` — Extract Keys from Source
 
-Extract all i18n keys from source code.
+Scans your source code for translation keys and extracts them for comparison with your locale files.
 
 ```bash
-# Extract from default ./src directory
-webext-i18n extract
-
-# Extract from specific source directory
-webext-i18n extract ./my-extension/src
+webext-i18n extract ./src
 ```
 
 **Output:**
 ```
-Found 42 translation key(s):
+Found 47 translation key(s):
 
   • extension_name
   • extension_description
-  • popup_title
-  • settings_saved
-  • error_network
+  • menu_settings
+  • menu_about
+  • dialog_confirm
+  • dialog_cancel
+  • notification_synced
   • ...
 ```
 
-### `webext-i18n unused [dir]`
+### `unused` — Find Unused Translation Keys
 
-Find translation keys that are defined but no longer used in source code.
+Identifies translation keys in your locale files that are no longer referenced in your source code.
 
 ```bash
-# Find unused keys in current directory
-webext-i18n unused
-
-# Find unused keys in specific extension
 webext-i18n unused ./my-extension
 ```
 
 **Output:**
 ```
 Found 5 unused key(s):
-  • old_feature_title
-  • deprecated_message
-  • legacy_setting
-  • ...
+  • legacy_import_export
+  • old_settings_migration
+  • deprecated_api_notice
+  • old_welcome_screen
+  • unused_placeholder_key
 ```
 
-## 📚 Programmatic API
+### `sort` — Sort Translation Keys
 
-### I18nGenerator
+Alphabetically sorts all keys in your `messages.json` files for consistent ordering and cleaner diffs.
 
-Generate `_locales/messages.json` files from translation objects.
+```bash
+webext-i18n sort ./my-extension/_locales/en
+```
+
+This is especially useful in CI pipelines to minimize diff noise in PRs.
+
+---
+
+## 📚 Library API
+
+### Basic Setup
 
 ```typescript
-import { I18nGenerator } from 'webext-i18n';
+import { 
+  I18nGenerator, 
+  I18nValidator, 
+  I18nRuntime, 
+  StringExtractor, 
+  CoverageStats 
+} from '@theluckystrike/webext-i18n';
+```
 
-// Generate all locales at once
+### Generating Locale Files
+
+```typescript
+// Generate _locales/messages.json from a translation object
 const translations = {
   en: {
-    greeting: 'Hello',
-    farewell: 'Goodbye',
-    items_count: 'You have $1 item(s)'
+    extension_name: 'My Extension',
+    greeting: 'Hello, {name}!',
+    items_count: 'You have {count, plural, =0 {no items} one {# item} other {# items}}'
   },
   es: {
-    greeting: 'Hola',
-    farewell: 'Adiós',
-    items_count: 'Tienes $1 artículo(s)'
+    extension_name: 'Mi Extensión',
+    greeting: '¡Hola, {name}!',
+    items_count: 'Tienes {count, plural, =0 {ningún elemento} one {# elemento} other {# elementos}}'
   },
   fr: {
-    greeting: 'Bonjour',
-    farewell: 'Au revoir',
-    items_count: 'Vous avez $1 article(s)'
+    extension_name: 'Mon Extension',
+    greeting: 'Bonjour, {name} !',
+    items_count: 'Vous avez {count, plural, =0 {aucun élément} one {# élément} other {# éléments}}'
   }
 };
 
-// Add descriptions for translators
-const descriptions = {
-  greeting: 'A friendly greeting',
-  farewell: 'A goodbye message',
-  items_count: 'Message showing number of items'
-};
+// Generate all locale files
+I18nGenerator.generate(translations, './my-extension');
 
-const result = I18nGenerator.generate(translations, './my-extension', descriptions);
-console.log(`Generated ${result.totalKeys} keys in ${result.locales.length} locales`);
-
-// Generate single locale
-I18nGenerator.generateSingle(
-  { title: 'My Extension', settings: 'Settings' },
-  './_locales/en/messages.json'
-);
-
-// Merge translations into existing file
-const mergeResult = I18nGenerator.merge('./_locales/es/messages.json', {
-  new_key: 'Nueva traducción'
-});
-console.log(`Added ${mergeResult.added}, updated ${mergeResult.updated}`);
+// Or generate a single locale
+I18nGenerator.generateLocale('de', translations.de, './my-extension');
 ```
 
-### I18nValidator
-
-Validate your extension's locale structure.
+### Validating Locale Files
 
 ```typescript
-import { I18nValidator } from 'webext-i18n';
-
+// Validate all locales in an extension
 const result = I18nValidator.validate('./my-extension');
 
 if (result.valid) {
-  console.log('✅ Validation passed!');
-  console.log(`Found ${result.locales.length} locales`);
+  console.log('All locales are valid!');
 } else {
-  console.log('❌ Validation failed:');
-  result.errors.forEach(err => console.log(`  - ${err}`));
+  console.error('Validation failed:', result.errors);
 }
 
-// Warnings include missing translations
-result.warnings.forEach(warning => console.log(`⚠️ ${warning}`));
+// Result shape:
+interface ValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  locales: string[];
+  files: Map<string, MessageEntry[]>;
+}
 ```
 
-### StringExtractor
-
-Extract i18n keys from source code.
+### Extracting Keys from Source
 
 ```typescript
-import { StringExtractor } from 'webext-i18n';
-
-// Extract all keys from source files
+// Extract i18n keys from TypeScript/JavaScript/HTML files
 const keys = StringExtractor.extractFromFiles('./src');
-console.log('Found keys:', keys);
+console.log(`Found ${keys.length} keys:`, keys);
 
-// Find unused translation keys
-const unusedKeys = StringExtractor.findUnused('./my-extension');
-if (unusedKeys.length > 0) {
-  console.log('Unused keys:', unusedKeys);
-}
+// Find unused keys (compares against source)
+const unused = StringExtractor.findUnused('./my-extension');
+console.log('Unused keys:', unused);
+
+// Supported patterns:
+const customPatterns = StringExtractor.extractWithPatterns(
+  './src',
+  [/t\(['"`]([^'"`]+)['"`]\)/g]  // Custom i18n function
+);
 ```
 
-### CoverageStats
-
-Get detailed translation coverage statistics.
+### Coverage Statistics
 
 ```typescript
-import { CoverageStats } from 'webext-i18n';
-
+// Get detailed coverage stats
 const stats = CoverageStats.getStats('./my-extension');
 
-stats.forEach(locale => {
-  console.log(`${locale.locale}: ${locale.coveragePercent}%`);
-  console.log(`  Translated: ${locale.translatedKeys}/${locale.totalKeys}`);
-  console.log(`  Missing: ${locale.missingKeys.join(', ')}`);
-});
+console.log(stats);
+/*
+{
+  locales: {
+    en: { total: 142, covered: 142, missing: [], percentage: 100 },
+    es: { total: 142, covered: 140, missing: ['key1', 'key2'], percentage: 98.6 },
+    ...
+  },
+  overall: { totalKeys: 142, totalLocales: 6, avgCoverage: 98.2 }
+}
+*/
 
-// Get markdown-formatted summary
-const summary = CoverageStats.getSummary('./my-extension');
-console.log(summary);
+// Get a summary string
+console.log(CoverageStats.getSummary('./my-extension'));
 ```
+
+### Runtime Translation
+
+```typescript
+import { I18nRuntime } from '@theluckystrike/webext-i18n';
+
+// Pluralization support
+const label = I18nRuntime.plural(count, 'item', 'items');
+// count=1 → "1 item"
+// count=5 → "5 items"
+// count=0 → "no items"
+
+// Simple message with placeholders
+const greeting = I18nRuntime.format('Hello, {name}!', { name: 'World' });
+
+// Load translations for runtime use
+I18nRuntime.loadTranslations('./my-extension/_locales/en/messages.json');
+const msg = I18nRuntime.t('greeting', { name: 'Alice' });
+```
+
+---
 
 ## ⚙️ Configuration
 
-### Package.json
+### Package.json Integration
 
-Add webext-i18n commands to your extension's `package.json`:
+Add i18n scripts to your `package.json`:
 
 ```json
 {
@@ -247,24 +286,36 @@ Add webext-i18n commands to your extension's `package.json`:
     "i18n:validate": "webext-i18n validate",
     "i18n:stats": "webext-i18n stats",
     "i18n:extract": "webext-i18n extract ./src",
-    "i18n:unused": "webext-i18n unused"
+    "i18n:unused": "webext-i18n unused",
+    "i18n:sort": "webext-i18n sort ./_locales/en",
+    "i18n:check": "npm run i18n:validate && npm run i18n:unused"
   }
 }
 ```
 
 ### .i18nrc Configuration File
 
-Create an `.i18nrc` file in your project root:
+Create an `.i18nrc` file in your project root for default options:
 
 ```json
 {
-  "sourceDir": "./src",
-  "localesDir": "./_locales",
+  "localesDir": "_locales",
   "defaultLocale": "en",
-  "supportedLocales": ["en", "es", "fr", "de", "ja", "zh_CN"],
-  "fileExtensions": [".js", ".ts", ".tsx", ".jsx", ".html"]
+  "sourceLocale": "en",
+  "sortKeys": true,
+  "validateOnBuild": true,
+  "extractPatterns": [
+    "chrome.i18n.getMessage\\(['\"`]([^'\"]+)['\"`]\\)",
+    "__\\(['\"`]([^'\"]+)['\"`]\\)"
+  ],
+  "ignoreKeys": [
+    "extraction_placeholder",
+    "debug_message"
+  ]
 }
 ```
+
+---
 
 ## 🌍 Supported Locales
 
@@ -272,61 +323,112 @@ webext-i18n supports all **55 Chrome Web Store locales**:
 
 | Code | Language | Code | Language |
 |------|----------|------|----------|
-| am | Amharic | kn | Kannada |
-| ar | Arabic | ko | Korean |
-| bg | Bulgarian | lt | Lithuanian |
-| bn | Bengali | lv | Latvian |
-| ca | Catalan | ml | Malayalam |
-| cs | Czech | mr | Marathi |
-| da | Danish | nl | Dutch |
-| de | German | no | Norwegian |
-| el | Greek | pl | Polish |
-| en | English | pt_BR | Portuguese (Brazil) |
-| es | Spanish | pt_PT | Portuguese (Portugal) |
-| et | Estonian | ro | Romanian |
-| fa | Persian | ru | Russian |
-| fi | Finnish | sk | Slovak |
-| fil | Filipino | sl | Slovenian |
-| fr | French | sr | Serbian |
-| gu | Gujarati | sv | Swedish |
-| he | Hebrew | sw | Swahili |
-| hi | Hindi | ta | Tamil |
-| hr | Croatian | te | Telugu |
-| hu | Hungarian | th | Thai |
-| id | Indonesian | tr | Turkish |
-| it | Italian | uk | Ukrainian |
-| ja | Japanese | vi | Vietnamese |
-| jv | Javanese | zh_CN | Chinese (Simplified) |
-| ka | Georgian | zh_TW | Chinese (Traditional) |
+| `am` | Amharic | `lt` | Lithuanian |
+| `ar` | Arabic | `lv` | Latvian |
+| `bg` | Bulgarian | `ml` | Malayalam |
+| `bn` | Bengali | `mr` | Marathi |
+| `ca` | Catalan | `ms` | Malay |
+| `cs` | Czech | `nl` | Dutch |
+| `da` | Danish | `no` | Norwegian |
+| `de` | German | `pl` | Polish |
+| `el` | Greek | `pt_BR` | Portuguese (Brazil) |
+| `en` | English (GB) | `pt_PT` | Portuguese (Portugal) |
+| `en_GB` | English (UK) | `ro` | Romanian |
+| `es` | Spanish | `ru` | Russian |
+| `es_419` | Spanish (Latin America) | `sk` | Slovak |
+| `et` | Estonian | `sl` | Slovenian |
+| `fa` | Persian | `sv` | Swedish |
+| `fi` | Finnish | `sw` | Swahili |
+| `fil` | Filipino | `ta` | Tamil |
+| `fr` | French | `te` | Telugu |
+| `gu` | Gujarati | `th` | Thai |
+| `he` | Hebrew | `tr` | Turkish |
+| `hi` | Hindi | `uk` | Ukrainian |
+| `hr` | Croatian | `ur` | Urdu |
+| `hu` | Hungarian | `vi` | Vietnamese |
+| `id` | Indonesian | `zh_CN` | Chinese (Simplified) |
+| `it` | Italian | `zh_TW` | Chinese (Traditional) |
+| `ja` | Japanese | | |
+
+---
 
 ## 🔄 CI Integration
 
-Add to your GitHub Actions workflow:
+### GitHub Actions Example
 
 ```yaml
-name: i18n
+name: i18n Check
 
 on: [push, pull_request]
 
 jobs:
-  validate:
+  i18n:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install
-      - run: npm install -g webext-i18n
-      - run: webext-i18n validate
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Validate i18n files
+        run: npx webext-i18n validate ./my-extension
+        
+      - name: Check for unused keys
+        run: npx webext-i18n unused ./my-extension
+        
+      - name: Generate coverage report
+        run: npx webext-i18n stats ./my-extension
 ```
 
-## 🔗 Related Projects
+### Pre-commit Hook
 
-- [chrome-extension-starter-mv3](https://github.com/theluckystrike/chrome-extension-starter-mv3) — Modern Chrome extension starter
-- [extension-publisher](https://github.com/theluckystrike/extension-publisher) — Publish extensions to Chrome Web Store
-- [webext-manifest](https://github.com/theluckystrike/webext-manifest) — Manifest.json utilities
-- [@zovo/webext](https://github.com/theluckystrike/webext) — Full Chrome extension toolkit
+Add to `.husky/pre-commit`:
+
+```bash
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx webext-i18n validate . || exit 1
+npx webext-i18n unused . || exit 1
+```
+
+---
+
+## 📁 Project Structure
+
+```
+webext-i18n/
+├── src/
+│   ├── cli.ts          # Command-line interface
+│   ├── generator.ts    # Generate locale files
+│   ├── validator.ts    # Validate locale structure
+│   ├── extractor.ts    # Extract keys from source
+│   ├── stats.ts        # Coverage statistics
+│   ├── runtime.ts      # Runtime translation helpers
+│   └── index.ts        # Main exports
+├── .github/
+│   └── workflows/
+│       └── ci.yml       # CI pipeline
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+---
+
+## 🤝 Related Projects
+
+- [chrome-extension-starter-mv3](https://github.com/theluckystrike/chrome-extension-starter-mv3) — Modern Chrome extension template
+- [extension-publisher](https://github.com/theluckystrike/extension-publisher) — Automate Chrome Web Store publishing
+- [@zovo/webext](https://github.com/theluckystrike) — Full ecosystem for Chrome extension development
+
+---
 
 ## 📄 License
 
@@ -334,4 +436,8 @@ MIT — [Zovo](https://zovo.one)
 
 ---
 
+<div align="center">
+
 Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
+
+</div>
